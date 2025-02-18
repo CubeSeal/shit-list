@@ -5,7 +5,7 @@ import axios from 'axios';
 // In production, use relative path since we're serving from the same origin
 const API_URL = process.env.NODE_ENV === 'production' ? '' : process.env.REACT_APP_API_URL;
 
-function TextInput() {
+function TextInput({ onSubmit }) {
   const [text, setText] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -26,21 +26,20 @@ function TextInput() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('');
-    setError('');
-    
-    if (!text.trim()) {
-      setError('Please enter some text');
-      return;
+    if (text.trim()) {
+      const result = await onSubmit(text);
+      if (result.success) {
+        setMessage(result.message);
+        setText('');
+      } else {
+        setError(result.message);
+      }
     }
+  };
 
-    try {
-      const response = await axios.post(`${API_URL}/api/save`, { text });
-      setMessage('Text saved successfully!');
-      setText(''); // Clear the input after successful save
-    } catch (error) {
-      console.error('Save error:', error);
-      setError(error.response?.data?.error || 'Error saving text. Please try again.');
+  const handleKeyPress = async (e) => {
+    if (e.key === 'Enter') {
+      await handleSubmit(e);
     }
   };
 
@@ -51,6 +50,7 @@ function TextInput() {
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
+          onKeyDown={handleKeyPress}
           placeholder="Enter your text here..."
           rows="4"
           cols="50"
