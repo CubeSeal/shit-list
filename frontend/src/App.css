@@ -1,5 +1,7 @@
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   padding: 20px;
 }
 
@@ -38,8 +40,38 @@
   }
 }
 
+.previous-texts {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.text-entry {
+  background-color: #f5f5f5;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.text-entry p {
+  margin: 0 0 5px 0;
+}
+
+.text-entry small {
+  color: #666;
+}
+
+.input-section {
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  padding: 20px 0;
+  border-top: 1px solid #eee;
+}
+
 .container {
-  max-width: 600px;
+  width: 100%;
+  max-width: 800px;
   margin: 0 auto;
 }
 

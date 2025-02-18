@@ -35,11 +35,23 @@ app.post('/api/save', async (req, res) => {
   try {
     const { text } = req.body;
     const newText = new Text({ text });
-    await newText.save();
-    res.status(200).json({ message: 'Text saved successfully' });
+    const savedText = await newText.save();
+    res.status(200).json(savedText);
   } catch (error) {
     console.error('Save error:', error);
     res.status(500).json({ error: 'Error saving text' });
+  }
+});
+
+// Add this route to get previous texts
+app.get('/api/texts', async (req, res) => {
+  try {
+    const texts = await Text.find()
+      .sort({ createdAt: -1 })
+      .limit(5);
+    res.json(texts);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching texts' });
   }
 });
 
