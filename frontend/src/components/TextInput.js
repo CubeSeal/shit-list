@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// In development, use the full URL from env
+// In production, use relative path since we're serving from the same origin
+const API_URL = process.env.NODE_ENV === 'production' ? '' : process.env.REACT_APP_API_URL;
+
 function TextInput() {
   const [text, setText] = useState('');
   const [message, setMessage] = useState('');
@@ -10,7 +14,7 @@ function TextInput() {
     // Test backend connection on component mount
     const testConnection = async () => {
       try {
-        await axios.get('http://localhost:3001/api/test');
+        await axios.get(`${API_URL}/api/test`);
         console.log('Backend connection successful');
       } catch (err) {
         console.error('Backend connection failed:', err);
@@ -31,7 +35,7 @@ function TextInput() {
     }
 
     try {
-      const response = await axios.post('http://localhost:3001/api/save', { text });
+      const response = await axios.post(`${API_URL}/api/save`, { text });
       setMessage('Text saved successfully!');
       setText(''); // Clear the input after successful save
     } catch (error) {

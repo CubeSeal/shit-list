@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
+const config = require('./config');
 
 const app = express();
 
@@ -8,8 +10,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MongoDB connection with error handling
-mongoose.connect('mongodb://localhost:27017/textdb', {
+// MongoDB connection
+mongoose.connect(config.mongoUri, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -24,12 +26,11 @@ const TextSchema = new mongoose.Schema({
 
 const Text = mongoose.model('Text', TextSchema);
 
-// API endpoint to test connection
+// API endpoints
 app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend is connected!' });
 });
 
-// API endpoint to save text
 app.post('/api/save', async (req, res) => {
   try {
     const { text } = req.body;
@@ -42,8 +43,17 @@ app.post('/api/save', async (req, res) => {
   }
 });
 
-// Change the port to 3001
-const port = 3001;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+// Serve static files in production
+if (config.nodeEnv === 'production') {
+  // Serve static files from the React build directory
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+  // Handle React routing, return all requests to React app
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+  });
+}
+
+app.listen(config.port, () => {
+  console.log(`Server running in ${config.nodeEnv} mode on port ${config.port}`);
 }); 

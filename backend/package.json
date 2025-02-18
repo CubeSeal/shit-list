@@ -1,19 +1,28 @@
 {
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "mongoos": "^0.0.1-security",
-    "mongoose": "^8.10.0"
+    "dotenv": "^16.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.0"
   },
   "name": "backend",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "start:dev": "NODE_ENV=development nodemon server.js",
+    "start:prod": "NODE_ENV=production node server.js",
+    "build": "cd ../frontend && npm run build",
+    "deploy": "npm run build && npm run start:prod",
+    "dev": "concurrently \"mongod --dbpath ../mongodb-data\" \"npm run start:dev\" \"cd ../frontend && npm start\"",
+    "dev:clean": "rm -rf ../mongodb-data/* && npm run dev"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2"
+  }
 }
