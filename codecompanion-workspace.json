@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "name": "Feedback Analyzer Web App",
+  "version": "1.0.0",
+  "system_prompt": "You are an AI assistant helping with a full-stack web application. The application allows users to submit text feedback, which is then stored in MongoDB. The application displays the most recent feedback entries. The backend is built with Node.js/Express and Mongoose, and the frontend uses React.",
+  "vars": {
+    "frontend_dir": "frontend",
+    "backend_dir": "backend"
+  },
+  "groups": [
+    {
+      "name": "Frontend Display",
+      "system_prompt": "Focus on the React frontend code responsible for displaying data to the user. The relevant files show how feedback is fetched from the API, managed in the component state, and rendered in the UI. Also includes the input component.",
+      "data": [
+        "frontendApp",
+        "frontendInput"
+      ]
+    },
+    {
+      "name": "Backend API Endpoints",
+      "system_prompt": "Focus on the Node.js/Express backend code that defines the HTTP API endpoints. The relevant file defines the routes, request handling, and responses sent back to the client.",
+      "data": [
+        "backendServer"
+      ]
+    },
+    {
+      "name": "Feedback Processing Logic",
+      "system_prompt": "Focus on the backend logic for handling and processing feedback. Currently, this involves saving new entries and retrieving the most recent ones, as defined within the API route handlers.",
+      "data": [
+        "backendServer"
+      ]
+    },
+    {
+      "name": "Database Interaction",
+      "system_prompt": "Focus on how the application interacts with the MongoDB database. Relevant files include the database configuration, schema/model definitions, connection logic, and database queries (CRUD operations).",
+      "data": [
+        "backendServer",
+        "backendConfig"
+      ]
+    }
+  ],
+  "data": {
+    "frontendApp": {
+      "type": "file",
+      "path": "${frontend_dir}/src/App.js",
+      "description": "The main React application component. Fetches feedback from the API, manages state, renders the feedback list, and handles submissions."
+    },
+    "frontendInput": {
+      "type": "file",
+      "path": "${frontend_dir}/src/components/TextInput.js",
+      "description": "React component responsible for capturing user text input and triggering the onSubmit callback."
+    },
+    "backendServer": {
+      "type": "file",
+      "path": "${backend_dir}/server.js",
+      "description": "The main Node.js/Express server file. Sets up the server, defines API routes (/api/save, /api/texts), connects to MongoDB, defines the Mongoose schema/model, and handles database operations."
+    },
+    "backendConfig": {
+      "type": "file",
+      "path": "${backend_dir}/config.js",
+      "description": "Configuration file for the backend, primarily containing the MongoDB connection string logic based on environment."
+    }
+  }
+}
